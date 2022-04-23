@@ -45,7 +45,7 @@ Q40. 1=I am much like everybody else. 2=I am an extraordinary person.
 
 The following demographics were entered on the next page. On this page they were also asked to affirm that their answers were accurate and suitable for research, those that did not (9%) are not included in this dataset.
 
-gender. Chosen from a drop down list (1=male, 3=female, 3=other; 0=none was chosen).
+gender. Chosen from a drop down list (1=male, 2=female, 3=other; 0=none was chosen).
 age. Entered as a free response. Ages below 14 have been ommited from the dataset.
 
 -- CALCULATED VALUES --
