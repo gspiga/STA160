@@ -82,6 +82,10 @@ While the above paragraphs decribe the methodology of cleaning the columns in ou
 \newpage
 
 \section{Multinomial Logistic Regression}
+We wanted to explore the ability to predict gender and age group given the responses a respondant inputted. One of the methods we perfomed in order to do this was a Multinomial Logistic Regression. Taking advantage of the sklearn's functions we were able to build a Multinomial Logistic model with a $L_2$ norm regularization. Before building the model, we did a 70/30 train-test split on the dataset, so we could measure how the model predicted unseen surveyees. In order to verify the accurarcy, we performed a Stratified 10-Fold Cross Validation and found the mean accuracy to be 0.635 with a standard deviation of 0.019. 
+
+We look at which questions have the greatest influence on deciding which gender. Given that this model is a multinomial logistic regression, we have three coefficients vectors, one for each gender category. 
+
 
 \subsection{Methodology}
 
