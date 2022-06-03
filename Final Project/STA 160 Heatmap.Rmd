@@ -22,13 +22,13 @@ census
 ```{r}
 # Be sure to mention filtering out certain states
 
-census <- census %>% group_by(STATEFIP) %>% 
+census_RPL <- census %>% group_by(STATEFIP) %>% 
   select(STATEFIP, RPL_THEME1, RPL_THEME2, RPL_THEME3, RPL_THEME4, RPL_THEMES) %>% 
   filter(!STATEFIP %in% c(2,15) & STATEFIP <= 56) %>% 
   summarise_all(list(mean)) %>% 
   ungroup
 
-census
+census_RPL
 ```
 
 ```{r}
@@ -40,40 +40,40 @@ ggplot(states) + geom_sf() +
 ```
 
 ```{r}
-census_map <- inner_join(census, states) %>% st_as_sf()
+census_RPL_map <- inner_join(census_RPL, states) %>% st_as_sf()
 ```
 
 
 ```{r}
-map1 <- ggplot(census_map, aes(fill = RPL_THEME1)) + geom_sf() +
+map1 <- ggplot(census_RPL_map, aes(fill = RPL_THEME1)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
             labs(title = "Socioeconomic Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map1
 
-map2 <- ggplot(census_map, aes(fill = RPL_THEME2)) + geom_sf() +
+map2 <- ggplot(census_RPL_map, aes(fill = RPL_THEME2)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
             labs(title = "Household Composition/Disability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map2
 
-map3 <- ggplot(census_map, aes(fill = RPL_THEME3)) + geom_sf() +
+map3 <- ggplot(census_RPL_map, aes(fill = RPL_THEME3)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
             labs(title = "Minority Status/Language, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map3
 
-map4 <- ggplot(census_map, aes(fill = RPL_THEME4)) + geom_sf() +
+map4 <- ggplot(census_RPL_map, aes(fill = RPL_THEME4)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
             labs(title = "Housing Type/Transportation, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map4
 
-map5 <- ggplot(census_map, aes(fill = RPL_THEMES)) + geom_sf() +
+map5 <- ggplot(census_RPL_map, aes(fill = RPL_THEMES)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
             labs(title = "Overall Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
@@ -81,6 +81,59 @@ map5 <- ggplot(census_map, aes(fill = RPL_THEMES)) + geom_sf() +
 map5
 ```
 
+```{r}
+# Be sure to mention filtering out certain states
+
+census_flag <- census %>% group_by(STATEFIP) %>% 
+  select(STATEFIP, F_THEME1, F_THEME2, F_THEME3, F_THEME4, F_TOTAL) %>% 
+  filter(!STATEFIP %in% c(2,15) & STATEFIP <= 56) %>% 
+  summarise_all(list(mean)) %>% 
+  ungroup
+
+census_flag
+```
+
+```{r}
+census_F_map <- inner_join(census_flag, states) %>% st_as_sf()
+```
+
+
+```{r}
+map6 <- ggplot(census_F_map, aes(fill = F_THEME1)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+
+map6
+
+map7 <- ggplot(census_F_map, aes(fill = F_THEME2)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+
+map7
+
+map8 <- ggplot(census_F_map, aes(fill = F_THEME3)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Number of Flags for Minority Status/Language, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+
+map8
+
+map9 <- ggplot(census_F_map, aes(fill = F_THEME4)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Number of Flags for Housing Type/Transportation, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+
+map9
+
+map10 <- ggplot(census_F_map, aes(fill = F_TOTAL)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Number of Total Flags, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+
+map10
+```
 
 
 
