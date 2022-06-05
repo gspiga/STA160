@@ -14,6 +14,18 @@ library(cowplot)
 ```
 
 ```{r}
+# Getting map of the US
+
+states <- states(class = "sf")
+states$STATEFIP <- as.numeric(states$STATEFP)
+
+ggplot(states) + geom_sf() +
+  theme_map() + coord_sf(datum = NA)
+```
+
+```{r}
+# Reading in data and renaming column for an inner join later
+
 census <- read.csv("https://raw.githubusercontent.com/gspiga/STA160/main/Final%20Project/Data/dataHeat.csv", row.names = "X", header = T)
 names(census)[names(census) == 'st'] <- 'STATEFIP'
 census
@@ -21,6 +33,7 @@ census
 
 
 ```{r}
+# Filtering out columns which are irrelevent to the map
 # Be sure to mention filtering out certain states
 
 census_RPL <- census %>% group_by(STATEFIP) %>% 
@@ -32,15 +45,11 @@ census_RPL <- census %>% group_by(STATEFIP) %>%
 census_RPL
 ```
 
-```{r}
-states <- states(class = "sf")
-states$STATEFIP <- as.numeric(states$STATEFP)
 
-ggplot(states) + geom_sf() +
-  theme_map() + coord_sf(datum = NA)
-```
 
 ```{r}
+# Joining map data and dataset
+
 census_RPL_map <- inner_join(census_RPL, states) %>% st_as_sf()
 ```
 
@@ -48,41 +57,42 @@ census_RPL_map <- inner_join(census_RPL, states) %>% st_as_sf()
 ```{r}
 map1 <- ggplot(census_RPL_map, aes(fill = rpl_theme1)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Socioeconomic Score, by State", fill = "Score") +
+            labs(title = "Socioeconomic Vulnerability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map1
 
 map2 <- ggplot(census_RPL_map, aes(fill = rpl_theme2)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Household Composition/Disability Score, by State", fill = "Score") +
+            labs(title = "Household Composition/Disability Vulnerability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map2
 
 map3 <- ggplot(census_RPL_map, aes(fill = rpl_theme3)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Minority Status/Language, by State", fill = "Score") +
+            labs(title = "Minority Status/Language Vulnerability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map3
 
 map4 <- ggplot(census_RPL_map, aes(fill = rpl_theme4)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Housing Type/Transportation, by State", fill = "Score") +
+            labs(title = "Housing Type/Transportation Vulnerability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map4
 
 map5 <- ggplot(census_RPL_map, aes(fill = rpl_themes)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Overall Score, by State", fill = "Score") +
+            labs(title = "Overall Vulnerability Score, by State", fill = "Score") +
             scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
 
 map5
 ```
 
 ```{r}
+# Filtering out columns which are irrelevant to the map
 # Be sure to mention filtering out certain states
 
 census_flag <- census %>% group_by(STATEFIP) %>% 
@@ -95,6 +105,8 @@ census_flag
 ```
 
 ```{r}
+# Joining map data and dataset
+
 census_F_map <- inner_join(census_flag, states) %>% st_as_sf()
 ```
 
@@ -102,39 +114,88 @@ census_F_map <- inner_join(census_flag, states) %>% st_as_sf()
 ```{r}
 map6 <- ggplot(census_F_map, aes(fill = f_theme1)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
-            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+            labs(title = "Average Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma")
 
 map6
 
 map7 <- ggplot(census_F_map, aes(fill = f_theme2)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
-            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+            labs(title = "Average Number of Flags for Socioeconomic Status, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma")
 
 map7
 
 map8 <- ggplot(census_F_map, aes(fill = f_theme3)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Number of Flags for Minority Status/Language, by State", fill = "Flags") +
-            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+            labs(title = "Average Number of Flags for Minority Status/Language, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma")
 
 map8
 
 map9 <- ggplot(census_F_map, aes(fill = f_theme4)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Number of Flags for Housing Type/Transportation, by State", fill = "Flags") +
-            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+            labs(title = "Average Number of Flags for Housing Type/Transportation, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma")
 
 map9
 
 map10 <- ggplot(census_F_map, aes(fill = f_total)) + geom_sf() +
             theme_map() + coord_sf(datum = NA) +
-            labs(title = "Number of Total Flags, by State", fill = "Flags") +
-            scale_fill_viridis(option = "plasma",breaks=c(0,.25,.5,.75,1),labels=c(0,.25,.5,.75,1),limits=c(0,1))
+            labs(title = "Average Number of Total Flags, by State", fill = "Flags") +
+            scale_fill_viridis(option = "plasma")
 
 map10
 ```
+
+```{r}
+# ***Update with new dataset once internet is back up***
+
+census_oldData = read.csv("county_clean.csv")
+names(census_oldData)[names(census_oldData) == 'ST'] <- 'STATEFIP'
+census_oldData
+```
+
+```{r}
+# Filtering out columns which are irrelevent to the map
+# Be sure to mention filtering out certain states
+
+census_unemployment <- census_oldData %>% group_by(STATEFIP) %>% 
+  select(STATEFIP, EP_UNEMP, EP_UNINSUR) %>% 
+  filter(!STATEFIP %in% c(2,15) & STATEFIP <= 56) %>% 
+  summarise_all(list(mean)) %>% 
+  ungroup
+
+census_unemployment
+```
+
+```{r}
+# Joining map data and dataset
+
+census_unemployment_map <- inner_join(census_unemployment, states) %>% st_as_sf()
+```
+
+```{r}
+map11 <- ggplot(census_unemployment_map, aes(fill = EP_UNEMP)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Estimated Percentage of Unemployed Adults, by State", fill = "Percentage") +
+            scale_fill_viridis(option = "plasma")
+
+map11
+
+map12 <- ggplot(census_unemployment_map, aes(fill = EP_UNINSUR)) + geom_sf() +
+            theme_map() + coord_sf(datum = NA) +
+            labs(title = "Estimated Percentage of Uninsured Adults, by State", fill = "Percentage") +
+            scale_fill_viridis(option = "plasma")
+
+map12
+```
+
+
+
+
+
+
 
 
 
